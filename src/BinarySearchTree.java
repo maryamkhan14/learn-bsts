@@ -1,15 +1,33 @@
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class BinarySearchTree<T extends Comparable> {
     // initialize root node
     Node<T> root;
-
+    int size;
     /**
      * Represents a tree.
      */
     public BinarySearchTree() {
         this.root = null;
+        this.size = 0;
+    }
+
+    /**
+     * Gets the tree's size
+     * @return size
+     */
+    public int getSize() {
+        return size;
+    }
+
+    /**
+     * Sets the tree's size
+     * @param size
+     */
+    public void setSize(int size) {
+        this.size = size;
     }
     /**
      * Represents a node.
@@ -35,8 +53,9 @@ public class BinarySearchTree<T extends Comparable> {
         }
     }
 
+
     /**
-     * Inserts a node into the tree.
+     * Inserts a node into the tree using data to be added.
      * @param data The node's data.
      */
     public void insert(T data) {
@@ -47,6 +66,7 @@ public class BinarySearchTree<T extends Comparable> {
         // Create root node if tree is empty
         if (root == null) {
             root = new Node<T>(data, height);
+            setSize(1);
             return root;
         }
 
@@ -65,7 +85,7 @@ public class BinarySearchTree<T extends Comparable> {
             // Set node's left child to return value of function
             node.left = insert(node.left, data, height + 1);
         }
-
+        setSize(getSize() + 1);
         return node;
     }
 
@@ -86,19 +106,13 @@ public class BinarySearchTree<T extends Comparable> {
     }
 
     public void breadthFirstTraversal() {
-        // TODO: replace with flag treeExists, treePopulated in Program
-        if (root == null) {
-            System.out.println("The binary tree is empty. Please insert some numbers, then try the command prompt again.");
-        } else {
-            breadthFirstTraversal(root);
-        }
+        breadthFirstTraversal(root);
     }
     private void breadthFirstTraversal(Node<T> node) {
         Queue<Node<T>> nodesQueue = new LinkedList<>();
         nodesQueue.offer(root);
         Node<T> prev = null;
 
-        System.out.println("Starting breadth-first traversal. ");
         while (!nodesQueue.isEmpty()) {
             Node<T> newNode = nodesQueue.poll();
             if(prev == null) {
