@@ -4,7 +4,7 @@ import java.util.Queue;
 
 public class BinarySearchTree<T extends Comparable> {
     // initialize root node
-    Node<T> root;
+    private Node<T> root;
     int size;
     /**
      * Represents a tree.
@@ -98,6 +98,7 @@ public class BinarySearchTree<T extends Comparable> {
     }
     private T findMaximum(Node<T> node) {
         // Base case: return data if no more right children
+        System.out.println("Found node with value " + node.data + ". Now checking if it has right child");
         if(node.right == null) {
             return node.data;
         }
@@ -105,16 +106,27 @@ public class BinarySearchTree<T extends Comparable> {
         return findMaximum(node.right);
     }
 
+    /**
+     * Completes breadth first traversal
+     */
     public void breadthFirstTraversal() {
         breadthFirstTraversal(root);
     }
     private void breadthFirstTraversal(Node<T> node) {
+        // initialize queue for nodes to be stored
         Queue<Node<T>> nodesQueue = new LinkedList<>();
-        nodesQueue.offer(root);
+
+        // initialize prev pointer, which keeps track of previous node viewed
         Node<T> prev = null;
 
+        // place root in queue
+        nodesQueue.offer(root);
+
         while (!nodesQueue.isEmpty()) {
+            // obtain first element in queue
             Node<T> newNode = nodesQueue.poll();
+
+            // check for start of list
             if(prev == null) {
                 System.out.print("Root is: " + newNode.data);
             }
@@ -126,10 +138,39 @@ public class BinarySearchTree<T extends Comparable> {
                 System.out.print(newNode.data + " ");
             }
 
+            // continue placing nodes in queue if left/right children exist
             if (newNode.left != null) nodesQueue.offer(newNode.left);
             if (newNode.right != null) nodesQueue.offer(newNode.right);
+
+            // now that new node has been viewed, assign it to prev
             prev = newNode;
         }
+    }
+
+    /**
+     * Completes pre-order traversal of tree.
+     */
+    public void preOrderTraversal() {
+        preOrderTraversal(root);
+    }
+    private void preOrderTraversal(Node<T> node) {
+        // Base case: if current node is null
+        if (node == null) {
+            System.out.print("null. Going back." + "\n\n");
+            return;
+        }
+
+        if(node == root) {
+            System.out.println(node.data + ": root");
+        } else {
+            System.out.print(node.data + "\n\n");
+        }
+
+        System.out.print("Going left of " + node.data + ". Left child is ");
+        preOrderTraversal(node.left);
+        System.out.print("Going right of " + node.data + ". Right child is ");
+        preOrderTraversal(node.right);
+        System.out.print("Done assessing all of " + node.data + "'s children. Going back up." + "\n\n");
     }
 
 }

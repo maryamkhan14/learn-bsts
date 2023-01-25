@@ -15,7 +15,8 @@ public class Helper {
                     2, "Insert a value in your tree.",
                     3, "Find the maximum value in your binary tree.",
                     4, "Find the minimum value in your binary tree.",
-                    5, "Perform a breadth first traversal."
+                    5, "Perform a breadth first traversal.",
+                    6, "Perform a pre-order traversal."
             )
     );
 
@@ -62,11 +63,17 @@ public class Helper {
                 breadthFirstTraversal();
                 presentOptions();
                 break;
+            case 6:
+                preOrderTraversal();
+                presentOptions();
+                break;
             case 0:
                 // TODO: Put exit message in exit method to be consistent
                 break;
             default:
                 System.out.println("Your chosen option isn't on the list. Please try again!");
+                presentOptions();
+                break;
         }
     }
 
@@ -86,7 +93,7 @@ public class Helper {
     private ArrayList<Integer> getNodeValues() {
         // initialize list of integers, and input string
         ArrayList<Integer> ints = new ArrayList<>();
-        String option = "";
+        String value = "";
 
 
         System.out.println("Please enter integer values. When you are done, enter '---' (three dashes.)");
@@ -94,14 +101,14 @@ public class Helper {
         Scanner sc = new Scanner(System.in);
         // Keep running until user enters exit prompt
         while(true) {
-            option = sc.nextLine();
+            value = sc.nextLine();
 
-            if (option.equals("---")) {
+            if (value.equals("---")) {
                 break;
             }
 
             try {
-                ints.add(Integer.parseInt(option));
+                ints.add(Integer.parseInt(value));
             } catch (Exception e) {
                 System.out.println("An error occurred. Please try again.");
                 break;
@@ -126,8 +133,15 @@ public class Helper {
      * Reports maximum value of tree
      */
     private void findMaximum() {
-        System.out.println("The maximum value is " + tree.findMaximum());
+        // check for empty tree
+        if (tree.getSize() == 0) {
+            System.out.println("The binary tree is empty. Please insert some numbers, then try the command prompt again.");
+        } else {
+            System.out.println("The maximum value is " + tree.findMaximum());
+        }
     }
+
+    //TODO: Remove repetition from traversals
     /**
      * Invokes breadthFirstTraversal method on current tree
      */
@@ -143,6 +157,16 @@ public class Helper {
         }
     }
 
+    private void preOrderTraversal() {
+        if (tree.getSize() == 0) {
+            System.out.println("The binary tree is empty. Please insert some numbers, then try the command prompt again.");
+        }
+        else {
+            System.out.println("Starting pre-order traversal. ");
+            tree.preOrderTraversal();
+            System.out.println("\n" + "Traversal complete!");
+        }
+    }
     /**
      * Constructs options list
      * @return optionsMessage The list of options.
