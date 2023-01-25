@@ -16,7 +16,10 @@ public class Helper {
                     3, "Find the maximum value in your binary tree.",
                     4, "Find the minimum value in your binary tree.",
                     5, "Perform a breadth first traversal.",
-                    6, "Perform a pre-order traversal."
+                    6, "Perform a pre-order traversal.",
+                    7, "Perform an in-order traversal.",
+                    8, "Find a node's successor",
+                    9, "Remove an item."
             )
     );
 
@@ -30,19 +33,9 @@ public class Helper {
 
     /**
      * Handle user input
-     * @param input The user's input
+     * @param option The user's input
      */
-    private void handleResponse(String input) {
-        // TODO: Implement better error handling (modularize)
-        int option;
-        try {
-            option = Integer.parseInt(input);
-        }
-        catch (Exception e) {
-            System.out.println("Your input wasn't a number. Please try again.");
-            presentOptions();
-            return;
-        }
+    private void handleResponse(Integer option) {
         switch (option) {
             case 1:
                 createNew();
@@ -58,6 +51,7 @@ public class Helper {
                break;
             case 4:
                 System.out.println("To be implemented...");
+                presentOptions();
                 break;
             case 5:
                 breadthFirstTraversal();
@@ -65,6 +59,18 @@ public class Helper {
                 break;
             case 6:
                 preOrderTraversal();
+                presentOptions();
+                break;
+            case 7:
+                inOrderTraversal();
+                presentOptions();
+                break;
+            case 8:
+                System.out.println("To be implemented...");
+                presentOptions();
+                break;
+            case 9:
+                System.out.println("To be implemented...");
                 presentOptions();
                 break;
             case 0:
@@ -93,7 +99,7 @@ public class Helper {
     private ArrayList<Integer> getNodeValues() {
         // initialize list of integers, and input string
         ArrayList<Integer> ints = new ArrayList<>();
-        String value = "";
+        String value;
 
 
         System.out.println("Please enter integer values. When you are done, enter '---' (three dashes.)");
@@ -107,11 +113,8 @@ public class Helper {
                 break;
             }
 
-            try {
+            if(validateInput(value)) {
                 ints.add(Integer.parseInt(value));
-            } catch (Exception e) {
-                System.out.println("An error occurred. Please try again.");
-                break;
             }
         }
         return ints;
@@ -137,7 +140,7 @@ public class Helper {
         if (tree.getSize() == 0) {
             System.out.println("The binary tree is empty. Please insert some numbers, then try the command prompt again.");
         } else {
-            System.out.println("The maximum value is " + tree.findMaximum());
+            System.out.println("The maximum value is " + tree.findMaximum() + ".");
         }
     }
 
@@ -167,13 +170,24 @@ public class Helper {
             System.out.println("\n" + "Traversal complete!");
         }
     }
+
+    private void inOrderTraversal() {
+        if (tree.getSize() == 0) {
+            System.out.println("The binary tree is empty. Please insert some numbers, then try the command prompt again.");
+        }
+        else {
+            System.out.println("Starting in-order traversal. ");
+            tree.inOrderTraversal();
+            System.out.println("\n" + "Traversal complete!");
+        }
+    }
     /**
      * Constructs options list
      * @return optionsMessage The list of options.
      */
     private String constructOptions() {
         String optionsMessage = "";
-        optionsMessage += "\n\n" + "-------------------------------------------------" + "\n\n";
+        optionsMessage += "-------------------------------------------------" + "\n\n";
         for (Integer optionKey : OPTIONS.keySet()) {
             optionsMessage += optionKey + ": " + OPTIONS.get(optionKey) + "\n";
         }
@@ -189,19 +203,47 @@ public class Helper {
     }
 
     /**
+     * Validates input string
+     * @param input The input user entered
+     * @return True if the input can be converted to integer, False if not
+     */
+    private boolean validateInput(String input) {
+        try {
+            int option = Integer.parseInt(input);
+        }
+        catch (Exception e) {
+            System.out.println("Your input wasn't a number. Please try again.");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Converts input to integer value if it is a valid integer value
+     * @param input The input the user entered
+     * @return the integer value of the input, or -1 if the input is an invalid integer value
+     */
+    private int convertInput(String input) {
+        if (validateInput(input)) return Integer.parseInt(input);
+        return -1;
+    }
+
+    /**
      * Reads user's selected option until user enters three dashes to exit.
      */
     private void getOption() {
-        String option = "";
+        String option; // initialize to any string version of integer value other than 0
 
         Scanner sc = new Scanner(System.in);
         // Keep running until user enters exit prompt
         while(true) {
-            if (option.equals(0)) {
-                break;
-            }
             option = sc.nextLine();
-            handleResponse(option);
+            if (validateInput(option)) {
+                if (convertInput(option) == 0) {
+                    break;
+                }
+                handleResponse(convertInput(option));
+            }
         }
     }
 
