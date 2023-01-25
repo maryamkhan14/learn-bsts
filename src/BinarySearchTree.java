@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -23,7 +24,7 @@ public class BinarySearchTree<T extends Comparable> {
 
     /**
      * Sets the tree's size
-     * @param size The size of the tree
+     * @param size
      */
     public void setSize(int size) {
         this.size = size;
@@ -64,14 +65,14 @@ public class BinarySearchTree<T extends Comparable> {
     private Node<T> insert(Node<T> node, T data, Integer height) {
         // Create root node if tree is empty
         if (root == null) {
-            root = new Node<>(data, height);
+            root = new Node<T>(data, height);
             setSize(1);
             return root;
         }
 
         // Base case: return new node if node is null (no more right children or left children)
         if (node == null) {
-            return new Node<>(data, height);
+            return new Node<T>(data, height);
         }
 
         if (data.compareTo(node.data) > 0) {
@@ -97,11 +98,10 @@ public class BinarySearchTree<T extends Comparable> {
     }
     private T findMaximum(Node<T> node) {
         // Base case: return data if no more right children
+        System.out.println("Found node with value " + node.data + ". Now checking if it has right child");
         if(node.right == null) {
-            System.out.print("No more right children exist. ");
             return node.data;
         }
-        System.out.println("Found node with value " + node.data + ". Searching right.");
         // Keep checking right children
         return findMaximum(node.right);
     }
@@ -120,7 +120,7 @@ public class BinarySearchTree<T extends Comparable> {
         Node<T> prev = null;
 
         // place root in queue
-        nodesQueue.offer(node);
+        nodesQueue.offer(root);
 
         while (!nodesQueue.isEmpty()) {
             // obtain first element in queue
@@ -148,7 +148,7 @@ public class BinarySearchTree<T extends Comparable> {
     }
 
     /**
-     * Demonstrates pre-order traversal of tree.
+     * Completes pre-order traversal of tree.
      */
     public void preOrderTraversal() {
         preOrderTraversal(root);
@@ -173,23 +173,4 @@ public class BinarySearchTree<T extends Comparable> {
         System.out.print("Done assessing all of " + node.data + "'s children. Going back up." + "\n\n");
     }
 
-    /**
-     * Demonstrates in-order traversal of tree
-     */
-    public void inOrderTraversal() {
-        inOrderTraversal(root);
-    }
-    private void inOrderTraversal(Node<T> node) {
-        // Base case: if current node is null
-        if (node == null) {
-            System.out.print("No children found. Going back up." + "\n");
-            return;
-        }
-
-        System.out.println("\n------------------\n" + "Child found. Searching left. ");
-        inOrderTraversal(node.left);    // recursively search left children
-        System.out.print("Node is " + node.data + ". Searching right. ");
-        inOrderTraversal(node.right);   // recursively search right children
-        System.out.print("Done assessing all of " + node.data + "'s descendants. Going back up." + "\n-----------------\n");
-    }
 }
