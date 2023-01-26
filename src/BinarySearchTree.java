@@ -88,6 +88,30 @@ public class BinarySearchTree<T extends Comparable> {
         return node;
     }
 
+
+    /**
+     * Finds minimum value present in tree given a node
+     * @return The minimum value in the tree.
+     */
+    public T findMinimum() {
+        return findMinimum(root);
+    }
+
+    private T findMinimum(Node<T> node) {
+        if (node == null) {
+            System.out.println("The binary tree is empty. Terminating search.");
+            return null;
+        }
+        // Base case: return data if no more right children
+        if(node.left == null) {
+            System.out.print("No more left children exist. ");
+            return node.data;
+        }
+        System.out.println("Found node with value " + node.data + ". Searching left.");
+        // Keep checking right children
+        return findMinimum(node.left);
+    }
+
     /**
      * Finds maximum value present in tree
      * @return The maximum value in the tree.
@@ -96,6 +120,10 @@ public class BinarySearchTree<T extends Comparable> {
         return findMaximum(root);
     }
     private T findMaximum(Node<T> node) {
+        if (node == null) {
+            System.out.println("The binary tree is empty. Terminating search.");
+            return null;
+        }
         // Base case: return data if no more right children
         if(node.right == null) {
             System.out.print("No more right children exist. ");
@@ -191,5 +219,48 @@ public class BinarySearchTree<T extends Comparable> {
         System.out.print("Node is " + node.data + ". Searching right. ");
         inOrderTraversal(node.right);   // recursively search right children
         System.out.print("Done assessing all of " + node.data + "'s descendants. Going back up." + "\n-----------------\n");
+    }
+
+    /**
+     * Searches for data
+     * @param data The value to be searched for
+     * @return True if node with value exists, false if not
+     */
+    public boolean search(T data) {
+        System.out.println("Starting search for " + data + ".");
+        if(search(root, data) == null) {
+            return false;
+        }
+        return true;
+    }
+    private T search(Node<T> node, T data) {
+        if (node == null) {
+            System.out.println("No node with the value " + data + " exists. Terminating search.");
+            return null;
+        }
+        if (node.data == data) {
+            System.out.println("Found node with value " + data + "! Terminating search.");
+            return node.data;
+        }
+        System.out.print("Found " + node.data + ". ");
+        if (data.compareTo(node.data) > 0) {
+            System.out.println(data + " is bigger. Searching right.");
+            data = search(node.right, data);
+        } else if (data.compareTo(node.data) < 0) {
+            System.out.println(data + " is smaller. Searching left.");
+            data = search(node.left, data);
+        }
+        return data;
+    }
+
+    public T findSuccessor(T data) {
+        return findSuccessor(root, data);
+    }
+    private T findSuccessor(Node<T> node, T data) {
+        if (data.compareTo(node.data) == 0) {
+            return findMinimum(node.right);
+        }
+        data = findSuccessor(node.right, data);
+        return data;
     }
 }

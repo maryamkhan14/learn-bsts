@@ -9,17 +9,18 @@ public class Helper {
     // declare and initialize options hashmap
     // TODO: Is it bad to declare & initialize at the same time?
     private static HashMap<Integer,String> OPTIONS = new HashMap<>(
-            Map.of(
-                    0, "Exit program",
-                    1, "Create a new binary tree!",
-                    2, "Insert a value in your tree.",
-                    3, "Find the maximum value in your binary tree.",
-                    4, "Find the minimum value in your binary tree.",
-                    5, "Perform a breadth first traversal.",
-                    6, "Perform a pre-order traversal.",
-                    7, "Perform an in-order traversal.",
-                    8, "Find a node's successor",
-                    9, "Remove an item."
+            Map.ofEntries(
+                    new AbstractMap.SimpleEntry<>(0, "Exit program"),
+                    new AbstractMap.SimpleEntry<>(1, "Create a new binary tree!"),
+                    new AbstractMap.SimpleEntry<>(2, "Insert a value in your tree."),
+                    new AbstractMap.SimpleEntry<>(3, "Find a value in your binary tree."),
+                    new AbstractMap.SimpleEntry<>(4, "Find the maximum value in your binary tree."),
+                    new AbstractMap.SimpleEntry<>(5, "Find the minimum value in your binary tree."),
+                    new AbstractMap.SimpleEntry<>(6, "Perform a breadth first traversal."),
+                    new AbstractMap.SimpleEntry<>(7, "Perform a pre-order traversal."),
+                    new AbstractMap.SimpleEntry<>(8, "Perform an in-order traversal."),
+                    new AbstractMap.SimpleEntry<>(9, "Find a node's successor"),
+                    new AbstractMap.SimpleEntry<>(10, "Remove a node")
             )
     );
 
@@ -35,7 +36,7 @@ public class Helper {
      * Handle user input
      * @param option The user's input
      */
-    private void handleResponse(Integer option) {
+    public void handleResponse(Integer option) {
         switch (option) {
             case 1:
                 createNew();
@@ -45,31 +46,37 @@ public class Helper {
                 insert();
                 presentOptions();
                 break;
+
             case 3:
-               findMaximum();
-               presentOptions();
-               break;
+                search();
+                presentOptions();
+                break;
+
             case 4:
-                System.out.println("To be implemented...");
+                findMaximum();
                 presentOptions();
                 break;
             case 5:
-                breadthFirstTraversal();
-                presentOptions();
-                break;
-            case 6:
-                preOrderTraversal();
-                presentOptions();
-                break;
-            case 7:
-                inOrderTraversal();
-                presentOptions();
-                break;
-            case 8:
                 System.out.println("To be implemented...");
                 presentOptions();
                 break;
+            case 6:
+                breadthFirstTraversal();
+                presentOptions();
+                break;
+            case 7:
+                preOrderTraversal();
+                presentOptions();
+                break;
+            case 8:
+                inOrderTraversal();
+                presentOptions();
+                break;
             case 9:
+                System.out.println("To be implemented...");
+                presentOptions();
+                break;
+            case 10:
                 System.out.println("To be implemented...");
                 presentOptions();
                 break;
@@ -86,7 +93,7 @@ public class Helper {
     /**
      * Creates new binary tree.
      */
-    private void createNew() {
+    public void createNew() {
         System.out.println("Creating new tree...");
         tree = new BinarySearchTree();
         System.out.println("New empty tree created!");
@@ -96,7 +103,7 @@ public class Helper {
      * Gets the list of nodes' values to be inserted into the tree.
      * @return List of integers inputted by user.
      */
-    private ArrayList<Integer> getNodeValues() {
+    public ArrayList<Integer> getNodeValues() {
         // initialize list of integers, and input string
         ArrayList<Integer> ints = new ArrayList<>();
         String value;
@@ -123,7 +130,7 @@ public class Helper {
     /**
      * Inserts list of node values into tree
      */
-    private void insert() {
+    public void insert() {
         // invoke BinarySearchTree's insert method on tree
         for (Integer integer : getNodeValues()) {
             tree.insert(integer);
@@ -135,7 +142,7 @@ public class Helper {
     /**
      * Reports maximum value of tree
      */
-    private void findMaximum() {
+    public void findMaximum() {
         // check for empty tree
         if (tree.getSize() == 0) {
             System.out.println("The binary tree is empty. Please insert some numbers, then try the command prompt again.");
@@ -148,7 +155,7 @@ public class Helper {
     /**
      * Invokes breadthFirstTraversal method on current tree
      */
-    private void breadthFirstTraversal() {
+    public void breadthFirstTraversal() {
         // check for empty tree
         if (tree.getSize() == 0) {
             System.out.println("The binary tree is empty. Please insert some numbers, then try the command prompt again.");
@@ -160,7 +167,7 @@ public class Helper {
         }
     }
 
-    private void preOrderTraversal() {
+    public void preOrderTraversal() {
         if (tree.getSize() == 0) {
             System.out.println("The binary tree is empty. Please insert some numbers, then try the command prompt again.");
         }
@@ -171,7 +178,7 @@ public class Helper {
         }
     }
 
-    private void inOrderTraversal() {
+    public void inOrderTraversal() {
         if (tree.getSize() == 0) {
             System.out.println("The binary tree is empty. Please insert some numbers, then try the command prompt again.");
         }
@@ -182,10 +189,21 @@ public class Helper {
         }
     }
     /**
+     * Searches tree
+     */
+    public void search() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Please enter the value you wish to search for");
+        String searchValue = sc.nextLine();
+        if (validateInput(searchValue)) {
+            tree.search(convertInput(searchValue));
+        }
+    }
+    /**
      * Constructs options list
      * @return optionsMessage The list of options.
      */
-    private String constructOptions() {
+    public String constructOptions() {
         String optionsMessage = "";
         optionsMessage += "-------------------------------------------------" + "\n\n";
         for (Integer optionKey : OPTIONS.keySet()) {
@@ -198,7 +216,7 @@ public class Helper {
     /**
      * Presents list of options using constructed message
      */
-    private void presentOptions() {
+    public void presentOptions() {
         System.out.println(constructOptions());
     }
 
@@ -223,7 +241,7 @@ public class Helper {
      * @param input The input the user entered
      * @return the integer value of the input, or -1 if the input is an invalid integer value
      */
-    private int convertInput(String input) {
+    public int convertInput(String input) {
         if (validateInput(input)) return Integer.parseInt(input);
         return -1;
     }
@@ -231,7 +249,7 @@ public class Helper {
     /**
      * Reads user's selected option until user enters three dashes to exit.
      */
-    private void getOption() {
+    public void getOption() {
         String option; // initialize to any string version of integer value other than 0
 
         Scanner sc = new Scanner(System.in);
